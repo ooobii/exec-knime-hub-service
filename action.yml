@@ -1,0 +1,46 @@
+name: 'Execute KNIME Hub Workflow Service'
+description: 'Initiate a KNIME Business Hub workflow deployment using its REST API, either synchronously or asynchronously.'
+author: 'ooobii'
+inputs:
+  url:
+    description: 'The URL to the KNIME Business Hub REST API.'
+    required: true
+  auth_id:
+    description: 'The application password ID used to authenticate with the KNIME Business Hub REST API.'
+    required: true
+  auth_key:
+    description: 'The application password key used to authenticate with the KNIME Business Hub REST API.'
+    required: true
+  deployment_id:
+    description: 'The ID of the deployment to execute. Usually starts with "rest:".'
+    required: true
+  async:
+    description: 'Determines if the action should wait for the workflow to stop.'
+    type: boolean
+    required: false
+    default: false
+  reset:
+    description: 'Whether to reset the deployed workflow before executing it.'
+    type: boolean
+    required: false
+    default: true
+  load_timeout:
+    description: 'The number of seconds to wait for the job to load.'
+    type: integer
+    required: false
+    default: 30
+  execute_timeout:
+    description: 'The number of seconds to wait for the job to finish executing. Not needed if "async" is enabled. "0" disables this.'
+    type: integer
+    required: false
+    default: 0
+  parameters:
+    description: 'The parameters to pass to the workflow.'
+    type: object
+    required: false
+runs:
+  using: 'node20'
+  main: 'index.js'
+branding:
+  color: 'green'
+  icon: 'check-square'
