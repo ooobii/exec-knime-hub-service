@@ -193,8 +193,8 @@ async function execute() {
   try {
     var executeJobUrl = new URL( `${baseUrl}/jobs/${jobId}`);
     executeJobUrl.searchParams.append('reset', resetWorkflow ? "true" : "false");
-    executeJobUrl.searchParams.append('async', asyncMode ? "true" : "false");
-    executeJobUrl.searchParams.append('timeout', asyncMode ? "-1" : (executeTimeout ? executeTimeout * 1000 : "-1"));
+    executeJobUrl.searchParams.append('async', "true");
+    executeJobUrl.searchParams.append('timeout', '-1');
     var executeJobResponse = await fetch(
       executeJobUrl, 
       {
@@ -215,7 +215,7 @@ async function execute() {
 
 
   if(!asyncMode) {
-    process.stdout.write(` ⏱️ Waiting for workflow to complete...`);
+    process.stdout.write(` ⏱️  Waiting for workflow to complete...`);
     try {
       var jobStatus = "EXECUTING";
       let counter = 0;
@@ -226,7 +226,7 @@ async function execute() {
           process.stdout.write(".");
           counter++;
         }
-      } while (jobStatus !== "EXECUTION_FINISHED" && counter < executeTimeout);
+      } while (jobStatus !== "EXECUTION_FINISHED" && (executeTimeout ? counter < executeTimeout : true));
       if(jobStatus !== "EXECUTION_FINISHED") {
         throw new Error(`Workflow failed to complete after ${executeTimeout} seconds. Current status: ${jobStatus}`);
       }
@@ -234,7 +234,7 @@ async function execute() {
       process.stdout.write(`❌ ERROR\n`);
       errorEncountered(`Failed to execute KNIME workflow: ${error}`);
     }
-    process.stdout.write(` ✅ Workflow Complete\n`);
+    process.stdout.write(`\n ✅ Workflow Complete\n`);
   }
 
 }
